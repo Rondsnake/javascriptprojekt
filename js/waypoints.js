@@ -66,5 +66,5 @@ const waypoints = [{
    {
     "x":1350,
     "y":231,
-    "direction":"dead"
+    "direction":"finish"
 }]
