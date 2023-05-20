@@ -1,8 +1,8 @@
 class Sprite {
-    constructor({imageSrc, frames = {max: 1}}){
+    constructor({imageSrc, frames}){
         this.position = {
-            x: waypoints[0].x,
-            y: waypoints[0].y
+            x: 0,
+            y: 0
         }
         this.image = new Image()
         this.image.src = imageSrc
@@ -12,7 +12,8 @@ class Sprite {
             elapsed: 0,
             hold: 10
         }
-    }
+    }       
+
     draw() {
         const cropWidth = this.image.width / this.frames.max
         const crop = {
@@ -32,8 +33,8 @@ class Sprite {
             this.position.x,
             this.position.y,
             crop.width,
-            crop.height)
-        
+            crop.height
+            )
         this.frames.elapsed++
         if (this.frames.elapsed % this.frames.hold === 0) {
             this.frames.current++
@@ -47,7 +48,7 @@ class Sprite {
 class Enemy extends Sprite{
     constructor() {
         super({
-            imageSrc: 'img/Walk.png', 
+            imageSrc: "img/Walk.png", 
             frames: {max: 3}})
         this.position={
             x: waypoints[0].x,
@@ -61,12 +62,16 @@ class Enemy extends Sprite{
             x: 0,
             y: 0
         }
-        this.health = 5 * waveCount
-        this.lives = true
+        this.health = 100 * waveCount
     }
 
     draw() {
         super.draw()
+
+        ctx.fillStyle = "red"
+        ctx.fillRect(this.position.x, this.position.y + 40, 32, 5)
+        ctx.fillStyle = "green"
+        ctx.fillRect(this.position.x, this.position.y + 40, 32 * this.healthBarSize / 100, 5)
     }
     pathing() {
         for (let i = 0; i < waypoints.length; i++) {
@@ -85,20 +90,21 @@ class Enemy extends Sprite{
                     this.speed.x = 0
                 }else if (waypoints[i].direction == "finish") {
                     enemies.shift()
+                    playerLives -= 1
                 }
             }
         }
     }
     update() {
-        if (this.lives = true) {
-            this.draw()
-            this.pathing()
-            this.position.y += this.speed.y
-            this.position.x += this.speed.x
-            this.center.y += this.speed.y
-            this.center.x += this.speed.x
-        } 
-    }
+        this.draw()
+        this.pathing()
+        this.position.y += this.speed.y
+        this.position.x += this.speed.x
+        this.center.y = this.position.y + 16
+        this.center.x = this.position.x + 16
+
+        this.healthBarSize = this.health / waveCount
+    } 
 }
 
 
@@ -106,7 +112,7 @@ class Enemy extends Sprite{
 class Tower extends Sprite{
     constructor({position={x:0,y:0}}){
         super({
-            imageSrc: 'img/Pink_Monster_Throw_4.png', 
+            imageSrc: "img/Pink_Monster_Throw_4.png", 
             frames: {max: 4}})
         this.position = position
         this.range = 250
@@ -166,9 +172,9 @@ class PlacementTile {
             mouse.y > this.position.y &&
             mouse.y < this.position.y + this.size
         ) {
-            this.color = 'white'
+            this.color = "white"
         } else {
-            this.color = 'rgba(255, 255, 255, 0.35)'
+            this.color = "rgba(255, 255, 255, 0.35)"
         }
     }
   }
@@ -176,7 +182,7 @@ class PlacementTile {
 class Projectile extends Sprite{
     constructor({position = {x: 0, y: 0}, enemy}) {
         super({
-            imageSrc: 'img/Tower 04 - Level 01 - Projectile.png', 
+            imageSrc: "img/Tower 04 - Level 01 - Projectile.png", 
             frames: {max: 6}
         })
         this.position = position

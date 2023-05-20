@@ -17,3 +17,25 @@ const placementTilesData = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 114, 0, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+function placementTilesMake(params) {
+    for (let i = 0; i < placementTilesData.length; i += 40) {
+    placementTilesData2D.push(placementTilesData.slice(i, i + 40))
+    }
+
+    placementTilesData2D.forEach((row, y) => {
+    row.forEach((symbol, x) => {
+        if (symbol === 114) {
+        placementTiles.push(
+            new PlacementTile({
+            position: {
+                x: x * 32,
+                y: y * 32
+            }
+            })
+        )
+        }
+    })
+    })
+}    
+    

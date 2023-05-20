@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <style>
         body {
-        margin: 0px;
-        background-color: black;
-        overflow: hidden;
+            margin: 0px;
+            background-color: black;
+            overflow: hidden;
         }
-        </style>
-        
-        <canvas class="canvas"></canvas>
-        <script src="js/classes.js"></script>
-        <script src="js/waypoints.js"></script>
-        <script src="js/functions.js"></script>
-        <script src="js/placementtiles.js"></script>
-        <script src="js/canvas.js"></script> 
-</body>
-</html>
+    </style>
 
+    <div style="
+        position: relative; 
+        display: inline-block;">
+        <canvas class="canvas"></canvas>
+
+        <div id="gameOver" style="
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            font-size: 100px;
+            display: none;">
+            Game Over
+        </div>
+        
+        <div id="coins" style="
+            position: absolute;
+            top: 5px;
+            right: 200px;
+            font-size: 50px;
+            color: gold;">
+            100 Coins
+        </div>
+        <div id="Lives" style="
+            position: absolute; 
+            top: 5px; 
+            right: 10px; 
+            font-size: 50px;
+            color: red;">
+            10 Lives
+        </div>
+        <div id="waveCount" style="
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            font-size: 50px;
+            color: black;">
+            Wave 1
+        </div>
+
+    </div>
+    
+    <script src="js/waypoints.js"></script>
+    <script src="js/placementtiles.js"></script>
+    <script src="js/functions.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/canvas.js"></script>
+</body>
+
+</html>

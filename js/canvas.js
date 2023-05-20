@@ -7,76 +7,49 @@ canvas.height = 576
 ctx.fillStyle = "black"
 ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-
-
-
-const placementTilesData2D = []
-
-for (let i = 0; i < placementTilesData.length; i += 40) {
-  placementTilesData2D.push(placementTilesData.slice(i, i + 40))
-}
-
-const placementTiles = []
-
-placementTilesData2D.forEach((row, y) => {
-  row.forEach((symbol, x) => {
-    if (symbol === 114) {
-      // add building placement tile here
-      placementTiles.push(
-        new PlacementTile({
-          position: {
-            x: x * 32,
-            y: y * 32
-          }
-        })
-      )
-    }
-  })
-})
-
-
-
-
-
 const image = new Image()
 image.onload = () => {
     animation()
 }
 image.src = 'img/towerdefensemap.png'
 
+const enemies=[]
+
+const placementTilesData2D = []
+const placementTiles = []
+placementTilesMake()
+
 var x = waypoints[0].x
 var y = waypoints[0].y
-
-const enemies=[]
-function spawnEnemies(spawnAmount) {
-    for (let j = 0; j < spawnAmount; j++) {
-        setTimeout(() => {
-            enemies.push(new Enemy());
-        }, 1500 * j);
-    }
-}
 
 const towers = []
 let activeTile = undefined
 
+let playerLives = 10
+let playerCoins = 100
 let spawnAmount = 5
 let waveCount = 0
+
 function animation(){
-    requestAnimationFrame(animation)
+    const animationId = requestAnimationFrame(animation)
     ctx.clearRect(0,0, canvas.width,canvas.height)
     ctx.drawImage(image,0,0)
+
+    for (let i = 0; i < enemies.length; i++) {
+        const enemy = enemies[i]
+        enemy.update()
+        document.querySelector("#Lives").innerHTML = `${playerLives} Lives`
+        if (playerLives <= 0) {
+            cancelAnimationFrame(animationId)
+            document.querySelector("#gameOver").style.display = "flex"
+        }
+    }
 
     if (enemies.length === 0) {
         spawnEnemies(spawnAmount)
         spawnAmount += 2
         waveCount++
-    }
-  
-    for (let i = 0; i < enemies.length; i++) {
-        enemies[i].update()
-        if (enemies[i].lives === false) {
-            enemies.splice(i, 1)
-        }
+        document.querySelector("#waveCount").innerHTML = `Wave ${waveCount}`
     }
     
     placementTiles.forEach(tile => {
@@ -102,10 +75,17 @@ function animation(){
             const yDiff = projectile.enemy.center.y - projectile.position.y
             const distance = Math.hypot(xDiff, yDiff)
             if (distance < 5) {
-                projectile.enemy.health -= 1
+                projectile.enemy.health -= 5
                 tower.projectiles.splice(i, 1)
                 if (projectile.enemy.health <= 0) {
-                    projectile.enemy.lives = false
+                    const enemyIndex = enemies.findIndex((enemy) => {
+                        return projectile.enemy === enemy
+                    })
+                    if (enemyIndex > -1) {
+                        enemies.splice(enemyIndex, 1)
+                        playerCoins += 25
+                        document.querySelector("#coins").innerHTML = `${playerCoins} Coins`
+                    }
                 }
             }
         }
@@ -113,7 +93,9 @@ function animation(){
 }
     
 canvas.addEventListener("click", (event) =>{
-    if (activeTile && activeTile.occupied === false) {
+    if (activeTile && activeTile.occupied === false && playerCoins >= 50) {
+        playerCoins -= 50
+        document.querySelector("#coins").innerHTML = `${playerCoins} Coins`
         towers.push(
             new Tower({
                 position: {
@@ -140,6 +122,5 @@ window.addEventListener("mousemove",(event)=>{
             break
         } 
     }
-    console.log(activeTile)
 })
-    
+

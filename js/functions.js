@@ -1,3 +1,11 @@
+function spawnEnemies(spawnAmount) {
+    for (let j = 0; j < spawnAmount; j++) {
+        setTimeout(() => {
+            enemies.push(new Enemy());
+        }, 1500 * j);
+    }
+}
+
 function pathing() {
     for (let i = 0; i < waypoints.length; i++) {
         if (enemy.position.x === waypoints[i].x && enemy.position.y === waypoints[i].y) {
@@ -27,8 +35,4 @@ function pathing() {
             }
         }
     }
-    //return(enemy.speed)
-}
-function spawn_enemy(){
-    
 }
